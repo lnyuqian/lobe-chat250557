@@ -1,0 +1,23 @@
+# 在 .github/workflows 目录下创建 sync-branch.yml
+name: Auto Sync Branch
+
+on:
+  schedule:
+    - cron: "0 * * * *" # 每小时执行一次
+
+jobs:
+  sync-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: your-branch-name # 替换为你的分支名
+
+      - name: Merge main branch
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git fetch origin main
+          git merge origin/main
+          git push origin HEAD:your-branch-name
